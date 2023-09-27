@@ -1,0 +1,28 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: api-gtw
+  namespace: ns1
+  labels:
+    app.kubernetes.io/name: api-gtw
+spec:
+  containers:
+    - name: container1
+      image: tonitienda/go-proxy-mermaid:0.1.0-arm64
+      ports:
+        - containerPort: 8080
+          name: public-port
+
+      env:
+        - name: PORT
+          value: "8080"
+        - name: SERVICE_NAME
+          value: "api-gtw"
+
+  # resources:
+  #     limits:
+  #       memory: "800Mi"
+  #       cpu: "800m"
+  #     requests:
+  #       memory: "600Mi"
+  #       cpu: "400m"
