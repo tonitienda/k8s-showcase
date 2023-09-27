@@ -98,8 +98,6 @@ flowchart LR
 
 Browser
 
-ApiGtwEndPoint((" "))
-
 subgraph Cluster
 
     subgraph NS1[ns1]
@@ -112,8 +110,7 @@ subgraph Cluster
 end
 
 ApiGtwSvc --- ApiGtw
-ApiGtwSvc --- ApiGtwEndPoint
-Browser --> ApiGtwEndPoint
+Browser --> ApiGtwSvc
 
 
 classDef Physical fill:#eee,stroke:#333,stroke-width:2px,color:#333,font-size:11px;
@@ -125,14 +122,13 @@ classDef Pod fill:#ccc,stroke:#333,stroke-width:1px,color:#333,font-size:11px;
 classDef Container fill:#bbb,stroke:#333,stroke-width:1px,color:#333,font-size:11px;
 
 
-classDef Service fill:#ccc,stroke:#333,stroke-width:1px,color:#333,font-size:11px;
-
+classDef PublicService fill:#ccc,stroke:#333,stroke-width:1px,color:#333,font-size:11px;
 
 class Cluster Physical
 class NS1 Logical
 class ApiGtw Pod
 class Container1 Container
-class ApiGtwSvc Service
+class ApiGtwSvc PublicService
 ```
 
 ### Resources
@@ -159,8 +155,6 @@ flowchart LR
 
 Browser
 
-ApiGtwEndPoint((" "))
-
 subgraph Cluster
 
     subgraph NS1[ns1]
@@ -185,8 +179,7 @@ subgraph Cluster
 end
 
 ApiGtwSvc --- ApiGtw
-ApiGtwSvc --- ApiGtwEndPoint
-Browser --> ApiGtwEndPoint
+Browser --> ApiGtwSvc
 
 
 classDef Physical fill:#eee,stroke:#333,stroke-width:2px,color:#333,font-size:11px;
@@ -197,8 +190,7 @@ classDef Pod fill:#ccc,stroke:#333,stroke-width:1px,color:#333,font-size:11px;
 
 classDef Container fill:#bbb,stroke:#333,stroke-width:1px,color:#333,font-size:11px;
 
-
-classDef Service fill:#ccc,stroke:#333,stroke-width:1px,color:#333,font-size:11px;
+classDef PublicService fill:#ccc,stroke:#333,stroke-width:1px,color:#333,font-size:11px;
 
 
 class Cluster Physical
@@ -212,7 +204,7 @@ class Container1 Container
 class Container1_1 Container
 class Container1_2 Container
 class Container1_3 Container
-class ApiGtwSvc Service
+class ApiGtwSvc PublicService
 ```
 
 
@@ -235,13 +227,9 @@ flowchart LR
 
 Browser
 
-ApiGtwEndPoint((" "))
-
 subgraph Cluster
 
     subgraph NS1[ns1]
-
-        BackendEndPoint((" "))
         
         subgraph ApiGtw
             Container1[Container]
@@ -265,14 +253,12 @@ subgraph Cluster
 end
 
 ApiGtwSvc --- ApiGtw
-ApiGtwSvc --- ApiGtwEndPoint
-Browser --> ApiGtwEndPoint
+Browser --> ApiGtwSvc
 
 BackendSvc --- Backend1
 BackendSvc --- Backend2
 BackendSvc --- Backend3
-BackendSvc --- BackendEndPoint
-ApiGtw ----> BackendEndPoint
+ApiGtw ----> BackendSvc
 
 classDef Physical fill:#eee,stroke:#333,stroke-width:2px,color:#333,font-size:11px;
 
@@ -282,8 +268,10 @@ classDef Pod fill:#ccc,stroke:#333,stroke-width:1px,color:#333,font-size:11px;
 
 classDef Container fill:#bbb,stroke:#333,stroke-width:1px,color:#333,font-size:11px;
 
+classDef PublicService fill:#ccc,stroke:#333,stroke-width:1px,color:#333,font-size:11px;
 
-classDef Service fill:#ccc,stroke:#333,stroke-width:1px,color:#333,font-size:11px;
+
+classDef PrivateService fill:#ccc,stroke:#333,stroke-width:3px,color:#333,font-size:11px;
 
 
 class Cluster Physical
@@ -297,8 +285,8 @@ class Container1 Container
 class Container1_1 Container
 class Container1_2 Container
 class Container1_3 Container
-class ApiGtwSvc Service
-class BackendSvc Service
+class ApiGtwSvc PublicService
+class BackendSvc PrivateService
 ```
 
 ### Resources
