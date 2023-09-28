@@ -2,7 +2,7 @@ kind: Deployment
 apiVersion: apps/v1
 metadata:
   name: backend
-  namespace: ns1
+  namespace: staging
 spec:
   replicas: 3
   selector:
@@ -24,11 +24,3 @@ spec:
               value: "8080"
             - name: SERVICE_NAME
               value: "backend"
-
-      # resources:
-      #     limits:
-      #       memory: "800Mi"
-      #       cpu: "800m"
-      #     requests:
-      #       memory: "600Mi"
-      #       cpu: "400m"

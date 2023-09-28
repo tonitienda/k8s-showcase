@@ -9,7 +9,7 @@ flowchart LR
 
 subgraph Cluster
 
-    subgraph NS1[ns1]
+    subgraph develop[develop]
 
     end
 end
@@ -21,27 +21,27 @@ classDef Logical fill:#ddd,stroke:#333,stroke-width:1px,color:#333,font-size:11p
 
 
 class Cluster Physical
-class NS1 Logical
+class develop Logical
 ```
 
 ### Resource files
 
 
-[namespace.yaml](.k8s/1_namespace1.yaml)
+[namespace.yaml](.k8s/develop/namespace.yaml)
 
 ### Commands
 
 ```shell
 kubectl get ns
 
-kubectl apply -f .k8s/1_namespace1.yaml 
+kubectl apply -f .k8s/develop/namespace.yaml 
 
 kubectl get ns
 
-kubectl get pods --namespace ns1
+kubectl get pods --namespace develop
 ```
 
-## 2 - Create the ApiGtw via Pod
+## 2 - Create the Api via Pod
 
 ### Goal
 
@@ -50,9 +50,9 @@ flowchart LR
 
 subgraph Cluster
 
-    subgraph NS1[ns1]
-        subgraph ApiGtw
-            Container1[Container]
+    subgraph develop[develop]
+        subgraph Api
+            Container1[HTTP Server]
         end
     end
 end
@@ -69,23 +69,23 @@ classDef Container fill:#bbb,stroke:#333,stroke-width:1px,color:#333,font-size:1
 
 
 class Cluster Physical
-class NS1 Logical
-class ApiGtw Pod
+class develop Logical
+class Api Pod
 class Container1 Container
 ```
 
 ### Resources
 
-[ApiGtw.yaml](.k8s/2_api-gtw.yaml)
+[api.yaml](.k8s/develop/api.yaml)
 
 ### Commands
 
 ```shell
-kubectl apply -f .k8s/api-gtw.yaml 
+kubectl apply -f .k8s/develop/api.yaml 
 
-kubectl get pods -n ns1
+kubectl get pods -n develop
 
-kubectl describe po api-gtw -n ns1
+kubectl describe po api -n develop
 ```
 
 ## Expose Pod 1 via Service 1
@@ -100,16 +100,16 @@ Browser
 
 subgraph Cluster
 
-    subgraph NS1[ns1]
-        subgraph ApiGtw
-            Container1[Container]
+    subgraph develop[develop]
+        subgraph Api
+            Container1[HTTP Server]
         end
 
-        ApiGtwSvc(ApiGtw)
+        ApiGtwSvc(Api)
     end
 end
 
-ApiGtwSvc --- ApiGtw
+ApiGtwSvc --- Api
 Browser --> ApiGtwSvc
 
 
@@ -125,22 +125,22 @@ classDef Container fill:#bbb,stroke:#333,stroke-width:1px,color:#333,font-size:1
 classDef PublicService fill:#ccc,stroke:#333,stroke-width:1px,color:#333,font-size:11px;
 
 class Cluster Physical
-class NS1 Logical
-class ApiGtw Pod
+class develop Logical
+class Api Pod
 class Container1 Container
 class ApiGtwSvc PublicService
 ```
 
 ### Resources
 
-[api-gtw-svc.yaml](.k8s/3-api-gtw-svc.yaml)
+[api-svc.yaml](.k8s/develop/api-svc.yaml)
 
 ### Commands
 
 ```shell
-kubectl apply -f .k8s/3_api-gtw-svc.yaml
+kubectl apply -f .k8s/develop/api-svc.yaml
 
-kubectl get all -n ns1
+kubectl get all -n develop
 ```
 
 Open: http://localhost:30001
@@ -157,20 +157,20 @@ Browser
 
 subgraph Cluster
 
-    subgraph NS1[ns1]
-        subgraph ApiGtw
-            Container1[Container]
+    subgraph develop[develop]
+        subgraph Api
+            Container1[HTTP Server]
         end
 
         subgraph Backend
             subgraph Backend1["Backend(1)"]
-                Container1_1[Container]
+                Container1_1[HTTP Server]
             end
             subgraph Backend2["Backend(1)"]
-                Container1_2[Container]
+                Container1_2[HTTP Server]
             end
             subgraph Backend3["Backend(1)"]
-                Container1_3[Container]
+                Container1_3[HTTP Server]
             end
         end
 
@@ -178,7 +178,7 @@ subgraph Cluster
     end
 end
 
-ApiGtwSvc --- ApiGtw
+ApiGtwSvc --- Api
 Browser --> ApiGtwSvc
 
 
@@ -194,9 +194,9 @@ classDef PublicService fill:#ccc,stroke:#333,stroke-width:1px,color:#333,font-si
 
 
 class Cluster Physical
-class NS1 Logical
+class develop Logical
 class Backend Logical
-class ApiGtw Pod
+class Api Pod
 class Backend1 Pod
 class Backend2 Pod
 class Backend3 Pod
@@ -208,16 +208,16 @@ class ApiGtwSvc PublicService
 ```
 
 
-Show [backend-deployment.yaml](.k8s/4_backend-deployment.yaml)
+Show [backend.yaml](.k8s/develop/backend.yaml)
 
 ```shell
 
-kubectl apply -f .k8s/deployment1.yaml
+kubectl apply -f .k8s/develop/backend.yaml
 
-kubectl get all -ns ns1
+kubectl get all -n develop
 ```
 
-### 5 - Connect ApiGtw to Backend
+### 5 - Connect Api to Backend
 
 
 ### Goal
@@ -229,36 +229,36 @@ Browser
 
 subgraph Cluster
 
-    subgraph NS1[ns1]
+    subgraph develop[develop]
         
-        subgraph ApiGtw
-            Container1[Container]
+        subgraph Api
+            Container1[HTTP Server]
         end
 
         subgraph Backend
             subgraph Backend1["Backend(1)"]
-                Container1_1[Container]
+                Container1_1[HTTP Server]
             end
             subgraph Backend2["Backend(1)"]
-                Container1_2[Container]
+                Container1_2[HTTP Server]
             end
             subgraph Backend3["Backend(1)"]
-                Container1_3[Container]
+                Container1_3[HTTP Server]
             end
         end
 
-        ApiGtwSvc(ApiGtw)
+        ApiGtwSvc(Api)
         BackendSvc(Backend)
     end
 end
 
-ApiGtwSvc --- ApiGtw
+ApiGtwSvc --- Api
 Browser --> ApiGtwSvc
 
 BackendSvc --- Backend1
 BackendSvc --- Backend2
 BackendSvc --- Backend3
-ApiGtw ----> BackendSvc
+Api ----> BackendSvc
 
 classDef Physical fill:#eee,stroke:#333,stroke-width:2px,color:#333,font-size:11px;
 
@@ -275,9 +275,9 @@ classDef PrivateService fill:#ccc,stroke:#333,stroke-width:3px,color:#333,font-s
 
 
 class Cluster Physical
-class NS1 Logical
+class develop Logical
 class Backend Logical
-class ApiGtw Pod
+class Api Pod
 class Backend1 Pod
 class Backend2 Pod
 class Backend3 Pod
@@ -291,13 +291,13 @@ class BackendSvc PrivateService
 
 ### Resources
 
-[backend service](.k8s/5_backend-svc.yaml)
+[backend service](.k8s/develop/backend-svc.yaml)
 
 ```shell
 
-kubectl apply -f .k8s/5_backend-svc.yaml
+kubectl apply -f .k8s/develop/backend-svc.yaml
 
-kubectl get all -ns ns1
+kubectl get all -n develop
 ```
 
 Open: http://localhost:30001

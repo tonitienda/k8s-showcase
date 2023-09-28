@@ -1,10 +1,10 @@
 kind: Pod
 apiVersion: v1
 metadata:
-  name: api-gtw
-  namespace: ns1
+  name: api
+  namespace: develop
   labels:
-    app.kubernetes.io/name: api-gtw
+    app.kubernetes.io/name: api
 spec:
   containers:
     - name: container1
@@ -17,7 +17,7 @@ spec:
         - name: PORT
           value: "8080"
         - name: SERVICE_NAME
-          value: "api-gtw"
+          value: "api"
         - name: NEXT_SERVICE
           value: "http://backend:8080"
 
