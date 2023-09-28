@@ -1,0 +1,42 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: api
+  namespace: staging
+  labels:
+    app.kubernetes.io/name: api
+spec:
+  containers:
+    - name: http-server
+      image: tonitienda/go-proxy-mermaid:0.2.0-arm64
+      ports:
+        - containerPort: 8080
+          name: public-port
+      # Controlling resource usage
+      resources:
+        limits:
+          memory: "800Mi"
+          cpu: "800m"
+        requests:
+          memory: "600Mi"
+          cpu: "400m"
+      # Controling healthchecks
+      readinessProbe:
+        httpGet:
+          path: /
+          port: 8080
+        initialDelaySeconds: 3
+        periodSeconds: 3
+      livenessProbe:
+        httpGet:
+          path: /
+          port: 8080
+        initialDelaySeconds: 3
+        periodSeconds: 3
+      env:
+        - name: PORT
+          value: "8080"
+        - name: SERVICE_NAME
+          value: "api"
+        - name: NEXT_SERVICE
+          value: "http://backend:8080"

@@ -2,7 +2,7 @@ kind: Deployment
 apiVersion: apps/v1
 metadata:
   name: backend
-  namespace: staging
+  namespace: develop
 spec:
   replicas: 3
   selector:
@@ -14,7 +14,7 @@ spec:
         app.kubernetes.io/name: backend
     spec:
       containers:
-        - name: container
+        - name: http-server
           image: tonitienda/go-proxy-mermaid:0.2.0-arm64
           ports:
             - containerPort: 8080
@@ -23,4 +23,4 @@ spec:
             - name: PORT
               value: "8080"
             - name: SERVICE_NAME
-              value: "backend"
+              value: "backend2"

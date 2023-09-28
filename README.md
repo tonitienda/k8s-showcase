@@ -3,6 +3,22 @@ Simple showcase for K8s
 
 ## About kubernetes
 
+### Desired state / Reconciliation
+
+```mermaid
+flowchart LR
+
+DesiredState["Desired State"]
+
+ActualState["Actual State"]
+
+Controller["Controllers"]
+
+ActualState --> Controller
+DesiredState ---> Controller
+Controller --> ActualState
+```
+
 ### Physical view
 
 ```mermaid
@@ -119,45 +135,4 @@ subgraph Cloud
 
 
 end
-```
-
-## This demo
-
-```mermaid
-flowchart LR
-
-subgraph Client
-    CLI[kubectl]
-    Browser[Browser]
-end
-
-subgraph K3S
-
-    subgraph default
-        API
-    end
-
-    subgraph ns1[Namespace 1]
-        subgraph Pod1[Pod]
-            Container1_1[Container]
-        end
-        Service1[Service1]
-    end
-
-
-    subgraph ns2[Namespace 2]
-        subgraph Pod2[Pod]
-            Container2_1[Container]
-        end
-        Service2[Service2]
-    end
-
-
-end
-
-CLI --> API
-Browser -- "GET" --> Service1
-Service1 --- Pod1
-Pod1 -- "GET" --> Service2
-Service2 --- Pod2
 ```
